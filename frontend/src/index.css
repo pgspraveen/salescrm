@@ -1,0 +1,26 @@
+/* Global reset - removes default browser spacing */
+* {
+    box-sizing: border-box;     /* width includes padding and border */
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: system-ui, -apple-system, sans-serif;
+    background: #f8fafc;
+}
+
+/* Responsive: on mobile, collapse sidebar to icon-only width */
+@media (max-width: 600px) {
+    .sidebar { width: 60px !important; }
+}
+
+/* Consistent font across all form elements */
+input, select, textarea, button {
+    font-family: inherit;
+}
+
+/* Custom scrollbar - thinner and subtle */
+::-webkit-scrollbar       { width: 6px; }
+::-webkit-scrollbar-track { background: #f1f5f9; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }

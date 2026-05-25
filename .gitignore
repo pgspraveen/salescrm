@@ -1,0 +1,21 @@
+# Python virtual environment - don't upload to GitHub
+venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# Environment variables - contains passwords, never upload
+.env
+
+# Node modules - too large, reinstalled via npm install
+node_modules/
+
+# Production build - generated automatically
+dist/
+
+# Database files
+*.sqlite3
+
+# OS files
+.DS_Store
+Thumbs.db
