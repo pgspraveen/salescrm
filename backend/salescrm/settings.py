@@ -1,33 +1,35 @@
-# settings.py = main configuration file for entire Django project
-# Django reads this file on startup to configure database, email, security etc.
-
 from pathlib import Path
 import os
+import dj_database_url
 from datetime import timedelta
 
-BASE_DIR = Path(__file__).resolve().parent.parent   # project root folder path
+BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-salescrm-key-change-in-production'
+# reads from environment variable in production, uses default locally
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-local-key-2026')
 
-DEBUG = True       # True = show detailed errors (development only, False in production)
+# True locally, False in production
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = ['*']   # * = accept requests from any domain (restrict in production)
+ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
-    'django.contrib.auth',          # built-in user authentication system
+    'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',               # Django REST Framework = tools to build APIs
-    'corsheaders',                  # CORS = allows React (port 5173) to call Django (port 8000)
-    'crm',                          # our custom app
+    'rest_framework',
+    'corsheaders',
+    'crm',
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',    # MUST be first to handle CORS headers
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    # whitenoise serves static files without separate server in production
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -36,7 +38,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'salescrm.urls'      # main urls.py location
+ROOT_URLCONF = 'salescrm.urls'
 
 TEMPLATES = [{
     'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -52,28 +54,36 @@ TEMPLATES = [{
 
 WSGI_APPLICATION = 'salescrm.wsgi.application'
 
-# SQL SERVER DATABASE
-# ENGINE = which database driver to use
-# mssql = Microsoft SQL Server via pyodbc
-DATABASES = {
-    'default': {
-        'ENGINE':   'mssql',
-        'NAME':     'SalesPulseCRM',        # database name
-        'USER':     'sa',                    # SQL Server username
-        'PASSWORD': 'Sales@123',             # SQL Server password
-        'HOST':     'PGSPRAVEEN\\SQLEXPRESS',
-        'PORT':     '',
-        'OPTIONS': {
-            'driver':       'ODBC Driver 18 for SQL Server',
-            'extra_params': 'TrustServerCertificate=yes;Encrypt=no;',
-        },
-    }
-}
+# DATABASE SETUP
+# DATABASE_URL environment variable set chesthe = PostgreSQL (Railway production)
+# Set kaakunte = SQL Server (local development)
+DATABASE_URL = os.environ.get('DATABASE_URL')
 
-# JWT SETTINGS
-# JWT = JSON Web Token, used to authenticate API requests
-# DEFAULT_AUTHENTICATION_CLASSES = how Django verifies who is making the request
-# DEFAULT_PERMISSION_CLASSES = who is allowed to access endpoints by default
+if DATABASE_URL:
+    # production: Railway provides PostgreSQL URL automatically
+    DATABASES = {
+        'default': dj_database_url.config(
+            default=DATABASE_URL,
+            conn_max_age=600
+        )
+    }
+else:
+    # local: SQL Server
+    DATABASES = {
+        'default': {
+            'ENGINE':   'mssql',
+            'NAME':     'SalesPulseCRM',
+            'USER':     'sa',
+            'PASSWORD': 'Sales@123',
+            'HOST':     'PGSPRAVEEN\\SQLEXPRESS',
+            'PORT':     '',
+            'OPTIONS': {
+                'driver':       'ODBC Driver 18 for SQL Server',
+                'extra_params': 'TrustServerCertificate=yes;Encrypt=no;',
+            },
+        }
+    }
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -83,30 +93,25 @@ REST_FRAMEWORK = {
     ),
 }
 
-# ACCESS_TOKEN_LIFETIME = token expires after 24 hours, user must login again
-# REFRESH_TOKEN_LIFETIME = refresh token valid for 7 days
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME':  timedelta(hours=24),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
 }
 
-# CORS = Cross-Origin Resource Sharing
-# Without this, browser blocks React from calling Django API
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",    # Vite dev server port
-]
+# allow React frontend to call Django API
+CORS_ALLOW_ALL_ORIGINS = True
 
-# EMAIL = Gmail SMTP configuration
-# SMTP = protocol used to send emails
-# TLS = encrypted connection to Gmail server
 EMAIL_BACKEND       = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST          = 'smtp.gmail.com'
 EMAIL_PORT          = 587
 EMAIL_USE_TLS       = True
-EMAIL_HOST_USER     = 'gunasaipraveenpemmada@gmail.com'
-EMAIL_HOST_PASSWORD = 'thhk lyfd mamw nfqc'    # Gmail App Password (not regular password)
+EMAIL_HOST_USER     = os.environ.get('EMAIL_HOST_USER',     'gunasaipraveenpemmada@gmail.com')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', 'thhk lyfd mamw nfqc')
 
-STATIC_URL = '/static/'
+# whitenoise serves these static files in production
+STATIC_URL  = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'   # auto-increment primary key type
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
