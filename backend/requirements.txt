@@ -37,7 +37,6 @@ joblib==1.5.3
 jsonpatch==1.33
 jsonpointer==3.1.1
 langchain==0.1.20
-langchain-classic==1.0.7
 langchain-community==0.0.38
 langchain-core==0.1.52
 langchain-protocol==0.0.15
