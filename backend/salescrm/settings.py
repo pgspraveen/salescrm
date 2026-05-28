@@ -5,12 +5,8 @@ from datetime import timedelta
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# reads from environment variable in production, uses default locally
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-local-key-2026')
-
-# True locally, False in production
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
-
 ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
@@ -28,7 +24,6 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    # whitenoise serves static files without separate server in production
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -54,13 +49,9 @@ TEMPLATES = [{
 
 WSGI_APPLICATION = 'salescrm.wsgi.application'
 
-# DATABASE SETUP
-# DATABASE_URL environment variable set chesthe = PostgreSQL (Railway production)
-# Set kaakunte = SQL Server (local development)
 DATABASE_URL = os.environ.get('DATABASE_URL')
 
 if DATABASE_URL:
-    # production: Railway provides PostgreSQL URL automatically
     DATABASES = {
         'default': dj_database_url.config(
             default=DATABASE_URL,
@@ -68,7 +59,6 @@ if DATABASE_URL:
         )
     }
 else:
-    # local: SQL Server
     DATABASES = {
         'default': {
             'ENGINE':   'mssql',
@@ -98,7 +88,6 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
 }
 
-# allow React frontend to call Django API
 CORS_ALLOW_ALL_ORIGINS = True
 
 EMAIL_BACKEND       = 'django.core.mail.backends.smtp.EmailBackend'
@@ -108,7 +97,6 @@ EMAIL_USE_TLS       = True
 EMAIL_HOST_USER     = os.environ.get('EMAIL_HOST_USER',     'gunasaipraveenpemmada@gmail.com')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', 'thhk lyfd mamw nfqc')
 
-# whitenoise serves these static files in production
 STATIC_URL  = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
