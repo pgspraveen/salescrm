@@ -13,7 +13,7 @@ node_modules/
 # Production build - generated automatically
 dist/
 
-# Database files
+# Database filesgit init
 *.sqlite3
 
 # OS files
