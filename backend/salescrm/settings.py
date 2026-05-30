@@ -2,6 +2,7 @@ from pathlib import Path
 import os
 import dj_database_url
 from datetime import timedelta
+# railway redeploy test
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -51,28 +52,13 @@ WSGI_APPLICATION = 'salescrm.wsgi.application'
 
 DATABASE_URL = os.environ.get('DATABASE_URL')
 
-if DATABASE_URL:
-    DATABASES = {
-        'default': dj_database_url.config(
-            default=DATABASE_URL,
-            conn_max_age=600
-        )
-    }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE':   'mssql',
-            'NAME':     'SalesPulseCRM',
-            'USER':     'sa',
-            'PASSWORD': 'Sales@123',
-            'HOST':     'PGSPRAVEEN\\SQLEXPRESS',
-            'PORT':     '',
-            'OPTIONS': {
-                'driver':       'ODBC Driver 18 for SQL Server',
-                'extra_params': 'TrustServerCertificate=yes;Encrypt=no;',
-            },
-        }
-    }
+DATABASES = {
+    'default': dj_database_url.config(
+        default=os.environ.get('DATABASE_URL'),
+        conn_max_age=600,
+        ssl_require=True
+    )
+}
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
