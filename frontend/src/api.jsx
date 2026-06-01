@@ -6,7 +6,9 @@ import axios from 'axios';
 
 // axios.create() = creates instance with default settings
 // baseURL = prepended to every request URL automatically
-const API = axios.create({ baseURL: 'http://localhost:8000/api' });
+const API = axios.create({
+  baseURL: 'https://salescrm-production-fc8f.up.railway.app/api'
+});
 
 // interceptors.request = runs before EVERY request is sent
 // Reads JWT token from localStorage and attaches to Authorization header
