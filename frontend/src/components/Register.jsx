@@ -28,7 +28,7 @@ export default function Register({ onLogin }) {
 
             setSuccess('Registration successful! Logging you in...');
 
-            onLogin(res.data);
+            alert("Registered Successfully! Please Login.");
 
         } catch (err) {
 
@@ -156,4 +156,4 @@ const s = {
         fontSize: '13px',
         marginBottom: '8px'
     },
-};
+};npm run build

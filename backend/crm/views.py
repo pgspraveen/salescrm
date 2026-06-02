@@ -60,13 +60,13 @@ You can now login and manage customers, deals and activities.
             from_email=settings.EMAIL_HOST_USER,
             recipient_list=[email],
             fail_silently=False,
-            timeout=10,
+            
         )
 
          print("EMAIL SENT SUCCESSFULLY")
 
        except Exception as e:
-        print("EMAIL ERROR =", str(e))
+        print("EMAIL ERROR =", repr(e))
 
     # RefreshToken = generates JWT token pair (access + refresh)
     # access token = short-lived (24hrs), sent with every request
