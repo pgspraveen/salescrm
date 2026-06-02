@@ -46,6 +46,7 @@ def register(request):
        try:
          print("EMAIL USER =", settings.EMAIL_HOST_USER)
          print("REGISTER EMAIL =", email)
+         print("EMAIL PASSWORD EXISTS =", bool(settings.EMAIL_HOST_PASSWORD))
 
          send_mail(
             subject='Welcome to SalesPulse CRM!',
