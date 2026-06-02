@@ -45,12 +45,13 @@ def register(request):
     if email:
         print("EMAIL USER =", settings.EMAIL_HOST_USER)
         print("EMAIL PASS EXISTS =", bool(settings.EMAIL_HOST_PASSWORD))
+        print("REGISTER EMAIL =", email)
         send_mail(
             subject='Welcome to SalesPulse CRM!',
             message=f'Hi {username},\n\nYour account was created successfully!\n\nLogin: http://localhost:5173',
             from_email=settings.EMAIL_HOST_USER,
             recipient_list=[email],
-            fail_silently=True,
+            fail_silently=False,
         )
 
     # RefreshToken = generates JWT token pair (access + refresh)
