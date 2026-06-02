@@ -29,6 +29,11 @@ export default function Register({ onLogin }) {
             setSuccess('Registration successful! Logging you in...');
 
             alert("Registered Successfully! Please Login.");
+            setForm({
+        username: '',
+        email: '',
+        password: ''
+    });
 
         } catch (err) {
 

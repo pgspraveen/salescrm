@@ -47,21 +47,21 @@ def register(request):
          print("EMAIL USER =", settings.EMAIL_HOST_USER)
          print("REGISTER EMAIL =", email)
 
-         #send_mail(
-            #subject='Welcome to SalesPulse CRM!',
-            #message=f'''Hi {username},
+         send_mail(
+            subject='Welcome to SalesPulse CRM!',
+            message=f'''Hi {username},
 
-#Registration successful!
+Registration successful!
 
-#Welcome to SalesPulse CRM 🚀
+Welcome to SalesPulse CRM 🚀
 
-#You can now login and manage customers, deals and activities.
-#''',
-            #from_email=settings.EMAIL_HOST_USER,
-            #recipient_list=[email],
-            #fail_silently=False,
+You can now login and manage customers, deals and activities.
+''',
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=[email],
+            fail_silently=False,
             
-       #)
+        )
 
          print("EMAIL SENT SUCCESSFULLY")
 
