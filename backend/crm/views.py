@@ -60,6 +60,7 @@ You can now login and manage customers, deals and activities.
             from_email=settings.EMAIL_HOST_USER,
             recipient_list=[email],
             fail_silently=True
+            timeout=10
         )
 
          print("EMAIL SENT SUCCESSFULLY")
