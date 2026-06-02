@@ -43,16 +43,29 @@ def register(request):
 
     # fail_silently=True = app won't crash if email sending fails
     if email:
-        print("EMAIL USER =", settings.EMAIL_HOST_USER)
-        print("EMAIL PASS EXISTS =", bool(settings.EMAIL_HOST_PASSWORD))
-        print("REGISTER EMAIL =", email)
-        send_mail(
+       try:
+         print("EMAIL USER =", settings.EMAIL_HOST_USER)
+         print("REGISTER EMAIL =", email)
+
+         send_mail(
             subject='Welcome to SalesPulse CRM!',
-            message=f'Hi {username},\n\nYour account was created successfully!\n\nLogin: http://localhost:5173',
+            message=f'''Hi {username},
+
+Registration successful!
+
+Welcome to SalesPulse CRM 🚀
+
+You can now login and manage customers, deals and activities.
+''',
             from_email=settings.EMAIL_HOST_USER,
             recipient_list=[email],
-            fail_silently=False,
+            fail_silently=True
         )
+
+         print("EMAIL SENT SUCCESSFULLY")
+
+       except Exception as e:
+        print("EMAIL ERROR =", str(e))
 
     # RefreshToken = generates JWT token pair (access + refresh)
     # access token = short-lived (24hrs), sent with every request
