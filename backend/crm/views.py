@@ -43,6 +43,8 @@ def register(request):
 
     # fail_silently=True = app won't crash if email sending fails
     if email:
+        print("EMAIL USER =", settings.EMAIL_HOST_USER)
+        print("EMAIL PASS EXISTS =", bool(settings.EMAIL_HOST_PASSWORD))
         send_mail(
             subject='Welcome to SalesPulse CRM!',
             message=f'Hi {username},\n\nYour account was created successfully!\n\nLogin: http://localhost:5173',
