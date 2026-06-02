@@ -49,18 +49,12 @@ def register(request):
          print("EMAIL PASSWORD EXISTS =", bool(settings.EMAIL_HOST_PASSWORD))
 
          send_mail(
-            subject='Welcome to SalesPulse CRM!',
-            message=f'''Hi {username},
-
-Registration successful!
-
-Welcome to SalesPulse CRM 🚀
-
-You can now login and manage customers, deals and activities.
-''',
-            from_email=settings.EMAIL_HOST_USER,
-            recipient_list=[email],
-            fail_silently=False,
+            
+            'Welcome to SalesPulse CRM!',
+            f'Hi {username}, Registration successful!',
+            settings.EMAIL_HOST_USER,
+            [email],
+            fail_silently=True
             
         )
 
