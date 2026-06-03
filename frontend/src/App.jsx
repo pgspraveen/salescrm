@@ -54,7 +54,7 @@ export default function App() {
                     {/* conditional render: show Login or Register component */}
                     {page === 'login'
                         ? <Login    onLogin={handleLogin} />
-                        : <Register onLogin={handleLogin} />
+                        : <Register onRegisterSuccess={() => setPage('login')} />
                     }
                 </div>
             </div>

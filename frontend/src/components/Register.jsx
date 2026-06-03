@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { registerUser } from '../api';
 
-export default function Register() {
+export default function Register({ onRegisterSuccess }) {
 
     const [form, setForm] = useState({
         username: '',
@@ -33,7 +33,8 @@ export default function Register() {
         username: '',
         email: '',
         password: ''
-    });
+        });
+         onRegisterSuccess();
 
         } catch (err) {
 
