@@ -24,7 +24,7 @@ export default function Register() {
 
         try {
 
-            const res = await registerUser(form);
+             await registerUser(form);
 
             setSuccess('Registration successful! Please login.');
 
