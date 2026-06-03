@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.core.mail import send_mail
 from django.conf import settings
+from threading import Thread
 
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -22,6 +23,28 @@ from .ai_engine import predict_deal_outcome, predict_customer_churn, get_sales_i
 # --- AUTH VIEWS ---
 # AllowAny = no token needed (public endpoint)
 # Anyone can register or login
+
+def send_welcome_email(email, username):
+    try:
+        send_mail(
+            subject='Welcome to SalesPulse CRM!',
+            message=f'''Hi {username},
+
+Registration successful!
+
+Welcome to SalesPulse CRM 🚀
+
+You can now login and manage customers, deals and activities.
+''',
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=[email],
+            fail_silently=True,
+        )
+
+        print("EMAIL SENT SUCCESSFULLY")
+
+    except Exception as e:
+        print("EMAIL ERROR =", str(e))
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
@@ -43,25 +66,13 @@ def register(request):
 
     # fail_silently=True = app won't crash if email sending fails
     if email:
-       try:
-         print("EMAIL USER =", settings.EMAIL_HOST_USER)
-         print("REGISTER EMAIL =", email)
-         print("EMAIL PASSWORD EXISTS =", bool(settings.EMAIL_HOST_PASSWORD))
+     print("EMAIL USER =", settings.EMAIL_HOST_USER)
+     print("REGISTER EMAIL =", email)
 
-         send_mail(
-            
-            'Welcome to SalesPulse CRM!',
-            f'Hi {username}, Registration successful!',
-            settings.EMAIL_HOST_USER,
-            [email],
-            fail_silently=True
-            
-        )
-
-         print("EMAIL SENT SUCCESSFULLY")
-
-       except Exception as e:
-        print("EMAIL ERROR =", repr(e))
+    Thread(
+        target=send_welcome_email,
+        args=(email, username)
+    ).start()
 
     # RefreshToken = generates JWT token pair (access + refresh)
     # access token = short-lived (24hrs), sent with every request
